@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MoodChef - Your Recipe</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+ body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', sans-serif;
+}
+  .card {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  color: white;
+}
+  .header { text-align: center; margin-bottom: 24px; }
+  .header p { font-size: 14px; color: #888; margin-bottom: 6px; }
+  .header h2 { font-size: 26px; font-weight: 700; color: #2d2d2d; }
+  .mood-badge { display: inline-block; background: #ede9fe; color: #7c3aed; padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-top: 8px; text-transform: capitalize; }
+  .section { margin-top: 22px; }
+  .section h3 { font-size: 13px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
+  .ingredients { display: flex; flex-wrap: wrap; gap: 8px; }
+  .ing { background: #f3f4f6; color: #374151; padding: 5px 12px; border-radius: 20px; font-size: 13px; }
+  .steps { list-style: none; }
+  .steps li { display: flex; gap: 12px; margin-bottom: 14px; align-items: flex-start; }
+  .step-num { width: 28px; height: 28px; background: linear-gradient(135deg, #667eea, #9b6fd4); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+  .step-text { font-size: 14px; color: #555; line-height: 1.6; padding-top: 4px; }
+  .actions { display: flex; gap: 12px; margin-top: 28px; }
+  .btn {
+  background: linear-gradient(135deg, #ffb703, #fb8500);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
+  .btn-voice { background: linear-gradient(135deg, #f59e0b, #f97316); color: white; }
+  .btn-again { background: linear-gradient(135deg, #667eea, #9b6fd4); color: white; }
+  .btn:hover { opacity: 0.9; }
+  .back { display: block; text-align: center; margin-top: 16px; font-size: 13px; color: #aaa; text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="header">
+    <p>Your Suggested Recipe</p>
+    <h2>{{ recipe.name }}</h2>
+    <span class="mood-badge">{{ mood }} mood</span>
+  </div>
+  <div class="section">
+    <h3>Ingredients</h3>
+    <div class="ingredients">
+      {% for ing in recipe.ingredients %}
+        <span class="ing">{{ ing }}</span>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="section">
+    <h3>Steps</h3>
+    <ol class="steps" id="steps-list">
+      {% for step in recipe.steps %}
+        <li>
+          <div class="step-num">{{ loop.index }}</div>
+          <div class="step-text">{{ step }}</div>
+        </li>
+      {% endfor %}
+    </ol>
+  </div>
+  <div class="actions">
+    <button class="btn btn-voice" onclick="speakRecipe()">🔊 Read Aloud</button>
+    <a href="/mood" class="btn btn-again" style="text-align:center; text-decoration:none; line-height: 1.4; display:flex; align-items:center; justify-content:center;">Try Another</a>
+  </div>
+  <a href="/home" class="back">← Back to Home</a>
+</div>
+
+<script>
+function speakRecipe() {
+  window.speechSynthesis.cancel();
+  const steps = [...document.querySelectorAll('.step-text')].map(s => s.innerText).join('. ');
+  const name = "{{ recipe.name }}";
+  const text = "Here is your recipe for " + name + ". " + steps;
+  const msg = new SpeechSynthesisUtterance(text);
+  msg.rate = 0.9;
+  window.speechSynthesis.speak(msg);
+}
+</script>
+</body>
+</html>

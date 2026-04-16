@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MoodChef - Detect Mood</title>
+<script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', sans-serif;
+}
+  .btn {
+  background: linear-gradient(135deg, #ffb703, #fb8500);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
+  h2 { font-size: 22px; font-weight: 700; color: #2d2d2d; margin-bottom: 6px; }
+  p.sub { font-size: 14px; color: #888; margin-bottom: 20px; }
+  video { width: 100%; border-radius: 14px; background: #f0f0f0; }
+  .mood-label { font-size: 18px; font-weight: 700; color: #7c6fdd; margin: 14px 0 6px; min-height: 28px; }
+  .status { font-size: 13px; color: #aaa; margin-bottom: 16px; }
+  select { width: 100%; padding: 11px 14px; border: 1.5px solid #e0e0e0; border-radius: 10px; font-size: 14px; outline: none; background: white; margin-bottom: 16px; }
+  .btn { width: 100%; padding: 13px; background: linear-gradient(135deg, #f59e0b, #f97316); color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; display: none; }
+  .btn:hover { opacity: 0.92; }
+  .back { display: block; margin-top: 14px; font-size: 13px; color: #aaa; text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div style="font-size:32px; margin-bottom:8px;">📷</div>
+  <h2>Detect Your Mood</h2>
+  <p class="sub">Allow camera access and we'll detect your emotion automatically</p>
+  <video id="video" autoplay muted playsinline></video>
+  <div class="mood-label" id="mood-label">Loading models...</div>
+  <div class="status" id="status">Please wait</div>
+  <select id="diet-select">
+    <option value="veg">Vegetarian</option>
+    <option value="non-veg">Non-Vegetarian</option>
+    <option value="vegan">Vegan</option>
+  </select>
+  <button class="btn" id="use-btn" onclick="submitMood()">Use This Mood & Get Recipe</button>
+  <a href="/mood" class="back">← Select mood manually instead</a>
+</div>
+
+<script>
+let detectedMood = '';
+
+async function init() {
+  try {
+    await faceapi.nets.tinyFaceDetector.loadFromUri('/static/models');
+    await faceapi.nets.faceExpressionNet.loadFromUri('/static/models');
+    document.getElementById('mood-label').innerText = 'Camera ready...';
+    document.getElementById('status').innerText = 'Starting camera';
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    document.getElementById('video').srcObject = stream;
+    document.getElementById('status').innerText = 'Scanning your face...';
+    detect();
+  } catch(e) {
+    document.getElementById('mood-label').innerText = 'Error loading';
+    document.getElementById('status').innerText = 'Make sure model files are in static/models/';
+  }
+}
+
+async function detect() {
+  const video = document.getElementById('video');
+  const result = await faceapi
+  .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 512, scoreThreshold: 0.5 }))
+  .withFaceExpressions();
+  if (result) {
+    const exp = result.expressions;
+    detectedMood = Object.keys(exp).reduce((a, b) => exp[a] > exp[b] ? a : b);
+    document.getElementById('mood-label').innerText = 'Mood: ' + detectedMood.charAt(0).toUpperCase() + detectedMood.slice(1);
+    document.getElementById('status').innerText = 'Detected! Click the button below.';
+    document.getElementById('use-btn').style.display = 'block';
+  } else {
+    document.getElementById('status').innerText = 'No face detected, keep looking at camera...';
+  }
+  setTimeout(detect, 1000);
+}
+
+function submitMood() {
+  const diet = document.getElementById('diet-select').value;
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = '/recommend';
+  form.innerHTML = '<input name="mood" value="' + detectedMood + '"><input name="diet" value="' + diet + '">';
+  document.body.appendChild(form);
+  form.submit();
+}
+
+init();
+</script>
+</body>
+</html>

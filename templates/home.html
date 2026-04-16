@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MoodChef - Home</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #8e7cc3, #c8a2c8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* CARD BOX */
+.card {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  padding: 30px 25px;
+  width: 340px;   /* 🔥 THIS FIXES SIZE */
+  text-align: center;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+}
+
+/* LOGO */
+.logo {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 15px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #667eea, #9b6fd4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+}
+
+/* TEXT */
+h1 {
+  font-size: 24px;
+  color: #222;
+  margin-bottom: 5px;
+}
+
+p {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+/* BUTTONS */
+.btn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* BUTTON COLORS */
+.mood {
+  background: linear-gradient(135deg, #f59e0b, #f97316);
+  color: white;
+}
+
+.detect {
+  background: linear-gradient(135deg, #667eea, #9b6fd4);
+  color: white;
+}
+
+/* LOGOUT */
+.logout {
+  margin-top: 20px;
+  font-size: 13px;
+}
+
+.logout a {
+  color: #666;
+  text-decoration: none;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+  <div class="logo">🍽️</div>
+
+  <h1>Welcome back, {{ username }}</h1>
+  <p>Let’s find you the perfect recipe</p>
+
+  <a href="/mood" class="btn mood">😊 Select Mood</a>
+  <a href="/detect" class="btn detect">📷 Detect Mood</a>
+
+  <div class="logout">
+    <a href="/logout">Logout</a>
+  </div>
+
+</div>
+
+</body>
+</html>
