@@ -1,116 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>MoodChef - Home</title>
+{% extends 'base.html' %}
 
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+{% block title %}Home{% endblock %}
 
-body {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #8e7cc3, #c8a2c8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Segoe UI', sans-serif;
-}
-
-/* CARD BOX */
-.card {
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(15px);
-  border-radius: 20px;
-  padding: 30px 25px;
-  width: 340px;   /* 🔥 THIS FIXES SIZE */
-  text-align: center;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-}
-
-/* LOGO */
-.logo {
-  width: 70px;
-  height: 70px;
-  margin: 0 auto 15px;
-  border-radius: 18px;
-  background: linear-gradient(135deg, #667eea, #9b6fd4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 30px;
-}
-
-/* TEXT */
-h1 {
-  font-size: 24px;
-  color: #222;
-  margin-bottom: 5px;
-}
-
-p {
-  font-size: 14px;
-  color: #555;
-  margin-bottom: 30px;
-}
-
-/* BUTTONS */
-.btn {
-  display: block;
-  width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  border-radius: 12px;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 14px;
-}
-
-/* BUTTON COLORS */
-.mood {
-  background: linear-gradient(135deg, #f59e0b, #f97316);
-  color: white;
-}
-
-.detect {
-  background: linear-gradient(135deg, #667eea, #9b6fd4);
-  color: white;
-}
-
-/* LOGOUT */
-.logout {
-  margin-top: 20px;
-  font-size: 13px;
-}
-
-.logout a {
-  color: #666;
-  text-decoration: none;
-}
-</style>
-
-</head>
-
-<body>
-
-<div class="card">
-
-  <div class="logo">🍽️</div>
-
-  <h1>Welcome back, {{ username }}</h1>
-  <p>Let’s find you the perfect recipe</p>
-
-  <a href="/mood" class="btn mood">😊 Select Mood</a>
-  <a href="/detect" class="btn detect">📷 Detect Mood</a>
-
-  <div class="logout">
-    <a href="/logout">Logout</a>
-  </div>
-
+{% block content %}
+<div class="logo">
+    <div class="logo-icon">🍽️</div>
+    <h1>Welcome back{% if username %}, {{ username }}{% endif %}!</h1>
+    <p>Let's find you the perfect recipe for today.</p>
 </div>
 
-</body>
-</html>
+<div class="form-group" style="display: flex; flex-direction: column; gap: 16px;">
+    <a href="/mood" class="btn btn-secondary">
+        😊 Select Mood Manually
+    </a>
+    
+    <a href="/detect" class="btn btn-accent">
+        📷 Detect Mood with Camera
+    </a>
+</div>
+
+<div class="logout-container">
+    <a href="/logout">
+        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+        Sign Out
+    </a>
+</div>
+{% endblock %}

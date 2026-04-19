@@ -1,82 +1,60 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>MoodChef - Choose Mood</title>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
- body {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #a18cd1, #fbc2eb);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Segoe UI', sans-serif;
-}
-  .card {
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(12px);
-  border-radius: 20px;
-  padding: 30px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-  color: white;
-}
-  .header { text-align: center; margin-bottom: 28px; }
-  .header h2 { font-size: 22px; font-weight: 700; color: #2d2d2d; margin-bottom: 6px; }
-  .header p { font-size: 14px; color: #888; }
-  label { display: block; font-size: 13px; color: #555; margin-bottom: 6px; margin-top: 18px; font-weight: 600; }
-  select { width: 100%; padding: 11px 14px; border: 1.5px solid #e0e0e0; border-radius: 10px; font-size: 14px; outline: none; background: white; cursor: pointer; }
-  select:focus { border-color: #7c6fdd; }
-  .btn {
-  background: linear-gradient(135deg, #ffb703, #fb8500);
-  color: white;
-  border: none;
-  border-radius: 10px;
-  padding: 12px;
-  font-weight: bold;
-  cursor: pointer;
-}
-  .btn:hover { opacity: 0.92; }
-  .detect-btn { display: block; text-align: center; margin-top: 16px; font-size: 13px; color: #7c6fdd; text-decoration: none; font-weight: 600; }
-  .back { display: block; text-align: center; margin-top: 12px; font-size: 13px; color: #aaa; text-decoration: none; }
-  .logo { text-align: center; margin-bottom: 8px; font-size: 32px; }
-</style>
-</head>
-<body>
-<div class="card">
-  <div class="logo">🍽️</div>
-  <div class="header">
-    <h2>Choose Your Mood</h2>
-    <p>Would you like to select your mood manually or use the mood detected?</p>
-  </div>
-  <a href="/detect" style="display:block; text-align:center; padding: 12px; background: linear-gradient(135deg, #f59e0b, #f97316); color:white; border-radius:12px; font-weight:600; text-decoration:none; font-size:14px;">Use Detected Mood</a>
-  <p style="text-align:center; color:#aaa; font-size:13px; margin: 14px 0 0;">Or, select a mood manually:</p>
-<form method="POST" action="/recommend">
-    <label>Your Mood</label>
-    <select name="mood">
-      <option value="happy">Happy 😊</option>
-      <option value="sad">Sad 😢</option>
-      <option value="angry">Angry 😠</option>
-      <option value="surprised">Surprised 😲</option>
-      <option value="fearful">Fearful 😨</option>
-      <option value="disgusted">Disgusted 🤢</option>
-      <option value="neutral">Neutral 😐</option>
-    </select>
-    <label>Dietary Preference</label>
-    <select name="diet">
-      <option value="veg">Vegetarian</option>
-      <option value="non-veg">Non-Vegetarian</option>
-      <option value="vegan">Vegan</option>
-    </select>
-    <label>Nutrition Goal</label>
-    <select name="nutrition">
-      <option value="balanced">Balanced</option>
-      <option value="high-protein">High Protein</option>
-      <option value="low-carb">Low Carb</option>
-    </select>
-    <button type="submit" class="btn">Submit Mood</button>
-  </form>
-  <a href="/home" class="back">← Back to Home</a>
+{% extends 'base.html' %}
+
+{% block title %}Choose Mood{% endblock %}
+
+{% block content %}
+<div class="logo">
+    <div class="logo-icon">😊</div>
+    <h1>Choose Your Mood</h1>
+    <p>How are you feeling right now?</p>
 </div>
-</body>
-</html>
+
+<form method="POST" action="/recommend">
+    <div class="form-group">
+        <label for="mood">Your Mood</label>
+        <select name="mood" id="mood">
+            <option value="happy">Happy 😊</option>
+            <option value="sad">Sad 😢</option>
+            <option value="angry">Angry 😠</option>
+            <option value="surprised">Surprised 😲</option>
+            <option value="fearful">Fearful 😨</option>
+            <option value="disgusted">Disgusted 🤢</option>
+            <option value="neutral">Neutral 😐</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="diet">Dietary Preference</label>
+        <select name="diet" id="diet">
+            <option value="veg">Vegetarian</option>
+            <option value="non-veg">Non-Vegetarian</option>
+            <option value="vegan">Vegan</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="nutrition">Nutrition Goal</label>
+        <select name="nutrition" id="nutrition">
+            <option value="balanced">Balanced</option>
+            <option value="high-protein">High Protein</option>
+            <option value="low-carb">Low Carb</option>
+        </select>
+    </div>
+    
+    <button type="submit" class="btn btn-primary" style="margin-top: 10px;">
+        Get Recipe
+    </button>
+</form>
+
+<div style="text-align: center; margin: 20px 0;">
+    <span style="color: var(--text-muted); font-size: 14px;">Or prefer to use camera?</span>
+</div>
+
+<a href="/detect" class="btn btn-accent">
+    📷 Detect Mood Automatically
+</a>
+
+<a href="/home" class="back-link">
+    &larr; Back to Home
+</a>
+{% endblock %}

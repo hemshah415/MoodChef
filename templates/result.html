@@ -1,97 +1,69 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>MoodChef - Your Recipe</title>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
- body {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #a18cd1, #fbc2eb);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Segoe UI', sans-serif;
-}
-  .card {
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(12px);
-  border-radius: 20px;
-  padding: 30px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-  color: white;
-}
-  .header { text-align: center; margin-bottom: 24px; }
-  .header p { font-size: 14px; color: #888; margin-bottom: 6px; }
-  .header h2 { font-size: 26px; font-weight: 700; color: #2d2d2d; }
-  .mood-badge { display: inline-block; background: #ede9fe; color: #7c3aed; padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-top: 8px; text-transform: capitalize; }
-  .section { margin-top: 22px; }
-  .section h3 { font-size: 13px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
-  .ingredients { display: flex; flex-wrap: wrap; gap: 8px; }
-  .ing { background: #f3f4f6; color: #374151; padding: 5px 12px; border-radius: 20px; font-size: 13px; }
-  .steps { list-style: none; }
-  .steps li { display: flex; gap: 12px; margin-bottom: 14px; align-items: flex-start; }
-  .step-num { width: 28px; height: 28px; background: linear-gradient(135deg, #667eea, #9b6fd4); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
-  .step-text { font-size: 14px; color: #555; line-height: 1.6; padding-top: 4px; }
-  .actions { display: flex; gap: 12px; margin-top: 28px; }
-  .btn {
-  background: linear-gradient(135deg, #ffb703, #fb8500);
-  color: white;
-  border: none;
-  border-radius: 10px;
-  padding: 12px;
-  font-weight: bold;
-  cursor: pointer;
-}
-  .btn-voice { background: linear-gradient(135deg, #f59e0b, #f97316); color: white; }
-  .btn-again { background: linear-gradient(135deg, #667eea, #9b6fd4); color: white; }
-  .btn:hover { opacity: 0.9; }
-  .back { display: block; text-align: center; margin-top: 16px; font-size: 13px; color: #aaa; text-decoration: none; }
-</style>
-</head>
-<body>
-<div class="card">
-  <div class="header">
-    <p>Your Suggested Recipe</p>
-    <h2>{{ recipe.name }}</h2>
-    <span class="mood-badge">{{ mood }} mood</span>
-  </div>
-  <div class="section">
-    <h3>Ingredients</h3>
-    <div class="ingredients">
-      {% for ing in recipe.ingredients %}
-        <span class="ing">{{ ing }}</span>
-      {% endfor %}
+{% extends 'base.html' %}
+
+{% block title %}Your Recipe{% endblock %}
+
+{% block content %}
+<div class="logo" style="margin-bottom: 20px;">
+    <p style="text-transform: uppercase; letter-spacing: 0.1em; font-size: 12px; margin-bottom: 8px;">Recommended For You</p>
+    <h1 style="font-size: 32px; line-height: 1.2;">{{ recipe.name }}</h1>
+    <div class="mood-badge">
+        {{ mood }} mood
     </div>
-  </div>
-  <div class="section">
-    <h3>Steps</h3>
-    <ol class="steps" id="steps-list">
-      {% for step in recipe.steps %}
-        <li>
-          <div class="step-num">{{ loop.index }}</div>
-          <div class="step-text">{{ step }}</div>
-        </li>
-      {% endfor %}
-    </ol>
-  </div>
-  <div class="actions">
-    <button class="btn btn-voice" onclick="speakRecipe()">🔊 Read Aloud</button>
-    <a href="/mood" class="btn btn-again" style="text-align:center; text-decoration:none; line-height: 1.4; display:flex; align-items:center; justify-content:center;">Try Another</a>
-  </div>
-  <a href="/home" class="back">← Back to Home</a>
 </div>
 
+<div class="recipe-section">
+    <div class="section-title">
+        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+        Ingredients
+    </div>
+    <div class="ingredients-list">
+        {% for ing in recipe.ingredients %}
+            <span class="ingredient-tag">{{ ing }}</span>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="recipe-section">
+    <div class="section-title">
+        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+        Instructions
+    </div>
+    <ol class="steps-list" id="steps-list">
+        {% for step in recipe.steps %}
+            <li class="step-item">
+                <div class="step-number">{{ loop.index }}</div>
+                <div class="step-text">{{ step }}</div>
+            </li>
+        {% endfor %}
+    </ol>
+</div>
+
+<div class="actions-row" style="flex-direction: column;">
+    <button class="btn btn-primary" onclick="speakRecipe()">
+        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+        Read Aloud
+    </button>
+    <a href="/mood" class="btn btn-secondary">
+        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+        Try Another
+    </a>
+</div>
+
+<a href="/home" class="back-link">
+    &larr; Back to Home
+</a>
+{% endblock %}
+
+{% block scripts %}
 <script>
 function speakRecipe() {
   window.speechSynthesis.cancel();
   const steps = [...document.querySelectorAll('.step-text')].map(s => s.innerText).join('. ');
-  const name = "{{ recipe.name }}";
+  const name = "{{ recipe.name|replace('\"', '\\\"')|replace('\'', '\\\'') }}";
   const text = "Here is your recipe for " + name + ". " + steps;
   const msg = new SpeechSynthesisUtterance(text);
   msg.rate = 0.9;
   window.speechSynthesis.speak(msg);
 }
 </script>
-</body>
-</html>
+{% endblock %}
